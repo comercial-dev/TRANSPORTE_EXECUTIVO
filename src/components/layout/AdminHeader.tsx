@@ -10,9 +10,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useState } from "react";
+import { AdminProfileModal } from "./AdminProfileModal";
 
 export const AdminHeader = () => {
+  const [profileOpen, setProfileOpen] = useState(false);
+  const handleOpenProfile = () => setProfileOpen(true);
+  const handleCloseProfile = () => setProfileOpen(false);
   return (
     <header className="h-16 flex items-center justify-between px-6 border-b bg-card">
       <div className="flex items-center gap-4">
@@ -52,20 +58,17 @@ export const AdminHeader = () => {
           <DropdownMenuContent align="end" className="w-56">
             <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleOpenProfile}>
               <User className="w-4 h-4 mr-2" />
               Perfil
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Settings className="w-4 h-4 mr-2" />
-              Configurações
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="text-destructive">
               Sair
             </DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>
+  </DropdownMenu>
+  <AdminProfileModal open={profileOpen} onClose={handleCloseProfile} />
       </div>
     </header>
   );
