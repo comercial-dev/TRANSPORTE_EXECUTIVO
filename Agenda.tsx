@@ -102,19 +102,19 @@ const Agenda = () => {
             <CardContent className="space-y-4">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Total Agendadas</span>
-                <span className="font-semibold">3</span>
+                <span className="font-semibold">0</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Confirmadas</span>
-                <span className="font-semibold text-status-success">1</span>
+                <span className="font-semibold text-status-success">0</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Pendentes</span>
-                <span className="font-semibold text-status-warning">1</span>
+                <span className="font-semibold text-status-warning">0</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Em Preparação</span>
-                <span className="font-semibold text-status-info">1</span>
+                <span className="font-semibold text-status-info">0</span>
               </div>
             </CardContent>
           </Card>
