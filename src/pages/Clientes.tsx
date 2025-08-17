@@ -1,6 +1,8 @@
 
+
 import React, { useState, useRef, useEffect } from "react";
 import { Pencil } from "lucide-react";
+import { getClientes, createCliente, updateCliente, deleteCliente } from "../lib/api-clientes";
 
 
 export default function Clientes() {
@@ -27,8 +29,13 @@ export default function Clientes() {
     setMenuOpcoes(null);
   }
 
-  function handleDelete(id) {
-    setClientes((prev) => prev.filter((c) => c.id !== id));
+  async function handleDelete(id) {
+    try {
+      await deleteCliente(id);
+      setClientes((prev) => prev.filter((c) => c.id !== id));
+    } catch (err) {
+      setErro("Erro ao excluir cliente");
+    }
     setMenuOpcoes(null);
   }
 
@@ -110,11 +117,29 @@ export default function Clientes() {
     // eslint-disable-next-line
   }, [editando]);
 
-  function handleSave(id) {
+  async function handleSave(id) {
     if (!validarCampos()) return;
-    setClientes((prev) => prev.map((c) => (c.id === id ? { ...c, ...form } : c)));
-    setEditando(null);
+    try {
+      await updateCliente(id, form);
+      const atualizados = await getClientes();
+      setClientes(atualizados);
+      setEditando(null);
+    } catch (err) {
+      setErro("Erro ao atualizar cliente");
+    }
   }
+  // Buscar clientes ao carregar a página
+  useEffect(() => {
+    async function fetchClientes() {
+      try {
+        const data = await getClientes();
+        setClientes(data);
+      } catch (err) {
+        setErro("Erro ao buscar clientes");
+      }
+    }
+    fetchClientes();
+  }, []);
 
   function handleCancel() {
     setEditando(null);
@@ -231,11 +256,16 @@ export default function Clientes() {
                 onClick={() => {
                   if (adicionando) {
                     if (!validarCampos()) return;
-                    setClientes((prev) => [
-                      ...prev,
-                      { ...form, id: Date.now() }
-                    ]);
-                    setAdicionando(false);
+                    (async () => {
+                      try {
+                        await createCliente(form);
+                        const atualizados = await getClientes();
+                        setClientes(atualizados);
+                        setAdicionando(false);
+                      } catch (err) {
+                        setErro("Erro ao criar cliente");
+                      }
+                    })();
                   } else {
                     handleSave(editando);
                   }
